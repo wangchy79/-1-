@@ -1,24 +1,19 @@
-
-#include<conio.h>
-#include<math.h>
 #include<string.h>
 #include<stdlib.h>
 #include<iostream>
 #include<fstream>
 using namespace std;
 int i, row = 0, line = 0;
-char test[1000];  //test文件中的字符 
-int number[100];	//常数表 
-char mark[100][5];   //标识符表
+char test[1000]; 
+int number[100];	
+char mark[100][5];   
 
-//词法分析
 int alysis(ofstream &fout)
 {
-	//标识符和保留字
+
     if ((test[i] >= 'A'&&test[i] <= 'Z')||(test[i]>='a'&&test[i]<='z'))  
     {
         char word[10];
-        //保留字表
         char keyword[100][100] = { "char",
                                 "int","if","else","var" ,"return","break",
 								"do","while","for","double","float","short","getc"}; 
@@ -32,7 +27,6 @@ int alysis(ofstream &fout)
         word[n] = '\0';
         i--;
 
-        //判断该标识符是否为保留字
         for (n = 0; n < 100; n++)
         {
             if (strcmp(word, keyword[n]) == 0)
@@ -42,7 +36,6 @@ int alysis(ofstream &fout)
             }
         }
 
-        //判断该标识符是否在标识符表中
         int m = 0;
         if (line != 0)
         {
@@ -52,23 +45,18 @@ int alysis(ofstream &fout)
                 if (strcmp(word, mark[q++]) == 0)
                 {
                     fout << word << "\t " << 0 <<" definition"<< endl;
-                    //printf(">> %s\t(0,%d) definition\n", word, q);
                     return 3;
                 }
             }
 
         }
 
-        //将该标识符保存到标识符表中
         strcpy(mark[line], word);
         fout << word << "\t" << 0 <<" definition"<< endl;
-        //printf(">> %s\t 0 definition\n", word);
-        //printf(">> %s\t(25, %d) definition\n", word, line + 1);
         line++;
         return 3;
 
     }
-	//数字 
     else if (test[i] >= '0' && test[i] <= '9')  
     {
         char x[100];
@@ -83,7 +71,6 @@ int alysis(ofstream &fout)
         i--;
         int num = atoi(x); //将字符串转换成int型
         
-        //判断该常数是否存在于常数表中
         if (row != 0)
         {   
             
@@ -97,19 +84,13 @@ int alysis(ofstream &fout)
 			}
         }
         
-        //将该常数保存到标识符表中
         number[row]=num;
-        
-
         int line = row;
         fout << num << "\t "<< 3 <<" number" <<endl;
-        //printf(">> %d\t 3\n", num);
         row++;
 
         return 3;
     }
-	
-	//各种符号
     else                      
     	switch (test[i])
     {
@@ -188,7 +169,7 @@ int alysis(ofstream &fout)
             }
         case '\\': fout << "\\\\\t" <<  40 <<" PT" <<endl; return 3;
     }
-
+    return 3;
 }
 
 int main()
@@ -199,7 +180,7 @@ int main()
     FILE *fp;
     fp=fopen("demo.c","r");
     ofstream fout1;
-    fout1.open("out.txt");
+    fout1.open("token.txt");
    
     while (!feof(fp))
     {
