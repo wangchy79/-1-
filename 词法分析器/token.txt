@@ -1,0 +1,13 @@
+state	0 definition
+=	17 PT
+1	 3 number
+while	 12 keyword
+(	28 PT
+(	28 PT
+ch	0 definition
+=	17 PT
+getc	 17 keyword
+(	28 PT
+fp	0 definition
+)	29 PT
+)	29 PT
